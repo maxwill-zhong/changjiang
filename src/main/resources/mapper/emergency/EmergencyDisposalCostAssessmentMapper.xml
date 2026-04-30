@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.les.decisionsupport.ods.emergency.event.mapper">
+    <resultMap id="BaseResultMap" type="com.les.decisionsupport.ods.emergency.event.model.EmergencyDisposalCostAssessment">
+        <id property="id" column="id"/>
+        <result property="eventId" column="event_id"/>
+        <result property="eventName" column="event_name"/>
+        <result property="materialLoss" column="material_loss"/>
+        <result property="equipmentLoss" column="equipment_loss"/>
+        <result property="personnelAllocation" column="personnel_allocation"/>
+        <result property="vehicleAllocation" column="vehicle_allocation"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="remarks" column="remarks"/>
+        <result property="created" column="created"/>
+        <result property="updated" column="updated"/>
+        <result property="source" column="_source"/>
+        <result property="batchno" column="batchno"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, event_id, event_name, material_loss, equipment_loss, personnel_allocation, vehicle_allocation, create_by, create_date, update_by, update_date, del_flag, remarks, created, updated, _source, batchno
+    </sql>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM ods_emergency_disposal_cost_assessment
+        where del_flag = '0'
+        <if test="eventId != null and eventId != ''">
+            AND event_id = = #{eventId}
+        </if>
+        <if test="eventName != null and eventName != ''">
+            AND event_name like concat('%', #{eventName}, '%')
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="com.les.decisionsupport.ods.emergency.event.model.EmergencyDisposalCostAssessment">
+        INSERT INTO ods_emergency_disposal_cost_assessment(
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="eventId != null">event_id,</if>
+            <if test="eventName != null">event_name,</if>
+            <if test="materialLoss != null">material_loss,</if>
+            <if test="equipmentLoss != null">equipment_loss,</if>
+            <if test="personnelAllocation != null">personnel_allocation,</if>
+            <if test="vehicleAllocation != null">vehicle_allocation,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateDate != null">update_date,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="created != null">created,</if>
+            <if test="updated != null">updated,</if>
+            <if test="_source != null">_source,</if>
+            <if test="batchno != null">batchno</if>
+        </trim>
+        ) VALUES (
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="eventId != null">#{eventId},</if>
+            <if test="eventName != null">#{eventName},</if>
+            <if test="materialLoss != null">#{materialLoss},</if>
+            <if test="equipmentLoss != null">#{equipmentLoss},</if>
+            <if test="personnelAllocation != null">#{personnelAllocation},</if>
+            <if test="vehicleAllocation != null">#{vehicleAllocation},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="created != null">#{created},</if>
+            <if test="updated != null">#{updated},</if>
+            <if test="_source != null">#{_source},</if>
+            <if test="batchno != null">#{batchno}</if>
+        </trim>
+        )
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.les.decisionsupport.ods.emergency.event.model.EmergencyDisposalCostAssessment">
+        UPDATE ods_emergency_disposal_cost_assessment
+        SET event_id = #{eventId},
+            event_name = #{eventName},
+            material_loss = #{materialLoss},
+            equipment_loss = #{equipmentLoss},
+            personnel_allocation = #{personnelAllocation},
+            vehicle_allocation = #{vehicleAllocation},
+            create_by = #{createBy},
+            create_date = #{createDate},
+            update_by = #{updateBy},
+            update_date = #{updateDate},
+            del_flag = #{delFlag},
+            remarks = #{remarks},
+            created = #{created},
+            updated = #{updated},
+            _source = #{source},
+            batchno = #{batchno}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteByPrimaryKey">
+        update ods_emergency_disposal_cost_assessment set del_flag = '0' WHERE id = #{id} amd
+    </delete>
+</mapper>

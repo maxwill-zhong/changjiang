@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.les.decisionsupport.ods.situation.mapper.RoadSafetyLevelInfoMapper">
+
+    <resultMap id="RoadSafetyLevelInfoResult" type="com.les.decisionsupport.ods.situation.model.RoadSafetyLevelInfo">
+        <result property="id" column="id"/>
+        <result property="batchNo" column="batch_no"/>
+        <result property="roadId" column="road_id"/>
+        <result property="bRoadIds" column="b_road_ids"/>
+        <result property="bRoadSegIds" column="b_road_seg_ids"/>
+        <result property="fogLevel" column="fog_level"/>
+        <result property="rainLevel" column="rain_level"/>
+        <result property="windLevel" column="wind_level"/>
+        <result property="freezeLevel" column="freeze_level"/>
+        <result property="snowLevel" column="snow_level"/>
+        <result property="flowSuddenLevel" column="flow_sudden_level"/>
+        <result property="speedDiffLevel" column="speed_diff_level"/>
+        <result property="vehicleTypeLevel" column="vehicle_type_level"/>
+        <result property="remainingCapacityLevel" column="remaining_capacity_level"/>
+        <result property="illegalEventLevel" column="illegal_event_level"/>
+        <result property="accidentLevel" column="accident_level"/>
+        <result property="roadSafetyDeviceLevel" column="road_safety_device_level"/>
+        <result property="roadDangerPointLevel" column="road_danger_point_level"/>
+        <result property="rangeStartTime" column="range_start_time"/>
+        <result property="rangeEndTime" column="range_end_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="base_select_sql">
+        SELECT
+            rs.id,
+            rs.batch_no,
+            rs.road_id,
+            rs.b_road_ids,
+            rs.b_road_seg_ids,
+            rs.fog_level,
+            rs.rain_level,
+            rs.wind_level,
+            rs.freeze_level,
+            rs.snow_level,
+            rs.flow_sudden_level,
+            rs.speed_diff_level,
+            rs.vehicle_type_level,
+            rs.remaining_capacity_level,
+            rs.illegal_event_level,
+            rs.accident_level,
+            rs.road_safety_device_level,
+            rs.road_danger_point_level,
+            rs.range_start_time,
+            rs.range_end_time,
+            rs.create_time,
+            rs.update_time,
+
+            r.road_name
+        FROM t_road_safety_level_info rs
+        LEFT JOIN ods_tims_dt_road r on r.id = rs.road_id
+    </sql>
+
+    <select id="selectOneByRoadIdAndBatchNo" resultMap="RoadSafetyLevelInfoResult">
+        <include refid="base_select_sql"/>
+        <where>
+            rs.batch_no = #{batchNo} and rs.road_id = #{roadId}
+        </where>
+    </select>
+
+    <select id="selectNewestBatchList" resultMap="RoadSafetyLevelInfoResult">
+        <include refid="base_select_sql"/>
+        <where>
+            rs.batch_no = (SELECT MAX(batch_no) FROM t_road_safety_level_info)
+        </where>
+    </select>
+
+
+    <select id="selectNewestBatchByRoadId" resultMap="RoadSafetyLevelInfoResult">
+        <include refid="base_select_sql"/>
+        <where>
+            rs.batch_no = (SELECT MAX(batch_no) FROM t_road_safety_level_info)
+            and rs.road_id = #{roadId}
+        </where>
+    </select>
+
+
+</mapper>

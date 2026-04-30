@@ -1,0 +1,108 @@
+spring:
+  messages:
+    encoding: UTF-8
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      dialect: org.hibernate.dialect.DmMysqlDialect
+      cache:
+        use_second_level_cache: false
+  datasource:
+    # 主数据源 (primary)
+    primary:
+#      url: jdbc:mysql://192.168.0.119:3306/sxods?useSSL=false&serverTimezone=UTC
+#      username: root
+#      password: 837KF~@B
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#      type: com.alibaba.druid.pool.DruidDataSource
+#      druid:
+#        initial-size: 5
+#        max-active: 20
+#        min-idle: 5
+#        validation-query: SELECT 1
+#        test-on-borrow: true
+      url: jdbc:dm://192.168.0.45:5237?schema=SXODS
+      username: SYSDBA
+      password: LESits123
+      driver-class-name: dm.jdbc.driver.DmDriver
+      type: com.alibaba.druid.pool.DruidDataSource
+      druid:
+        initial-size: 5
+        max-active: 20
+        min-idle: 5
+        validation-query: SELECT 1
+        test-on-borrow: true
+
+    # 从数据源 (secondary)
+    secondary:
+      enabled: false
+      driverClassName: dm.jdbc.driver.DmDriver
+      url: jdbc:dm://192.168.0.55:15236
+      username: SYSDBA
+      password: LESits123
+      type: com.alibaba.druid.pool.DruidDataSource
+      druid:
+        initial-size: 3
+        max-active: 15
+    # Druid 监控配置
+    druid:
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: admin
+        login-password: admin
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+  rabbitmq:
+    host: 192.168.110.132
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: /
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 64MB
+      max-request-size: 64MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+server:
+  port: 8349
+  tomcat:
+    uri-encoding: UTF-8
+    max-http-form-post-size: 64MB
+default:
+  username: sxyj
+  password: 111111
+global:
+  schedule:
+    analyzeJamCycle: 0 0/5 * * * ?
+cityCode: 140000
+center: 37.841106,112.548237
+
+# MyBatis-Plus 配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 开启 SQL 日志
+
+springdoc:
+  packages-to-scan: com.les.decisionsupport
+logging:
+  level:
+    com.les: debug
+    com.alibaba.druid: DEBUG
+    org.mybatis: DEBUG
+    org.springframework.boot.autoconfigure.jdbc: DEBUG
+    org.springframework.jdbc.datasource.DataSourceUtils: TRACE
+    com.alibaba.nacos: warn
+    com.alibaba.cloud.nacos.client.NacosPropertySourceBuilder: debug
+# 本地文件上传
+file:
+  path: /temp
+  prefix: /static

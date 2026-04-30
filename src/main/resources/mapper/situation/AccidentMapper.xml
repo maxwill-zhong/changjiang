@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.les.decisionsupport.ods.situation.mapper.AccidentMapper">
+
+    <resultMap id="AccidentEntityResult" type="com.les.decisionsupport.ods.situation.model.AccidentEntity">
+        <result property="id" column="id"/>
+        <result property="departmentId" column="department_id"/>
+        <result property="departmentName" column="department_name"/>
+        <result property="occurringTime" column="occurringtime"/>
+        <result property="expectedTerminalTime" column="expectedterminaltime"/>
+        <result property="terminalTime" column="terminaltime"/>
+        <result property="incidentType" column="incidenttype"/>
+        <result property="roadId" column="road_id"/>
+        <result property="roadName" column="road_name"/>
+        <result property="direction" column="direction"/>
+        <result property="weather" column="weather"/>
+        <result property="numberOfOccupiedLanes" column="numberofoccupiedlanes"/>
+        <result property="vehiclesInfo" column="vehiclesinfo"/>
+        <result property="numberOfLanes" column="numberoflanes"/>
+        <result property="numberOfPeople" column="numberofpeople"/>
+        <result property="numberOfSlightInjury" column="numberofslightinjury"/>
+        <result property="numberOfSeriousInjury" column="numberofseriousinjury"/>
+        <result property="numberOfFatality" column="numberoffatality"/>
+        <result property="lng" column="lng"/>
+        <result property="lat" column="lat"/>
+    </resultMap>
+
+
+    <select id="selectByCustomQuery" resultMap="AccidentEntityResult">
+
+        SELECT e.id,e.department as department_id,d.name as department_name,e.occurringtime,
+               e.expectedterminaltime,e.terminaltime,e.incidenttype,e.road as road_id,r.name as road_name,
+               e.direction,e.weather,e.numberofoccupiedlanes,e.vehiclesinfo,e.numberoflanes,e.numberofpeople,
+               e.numberofslightinjury,e.numberofseriousinjury,e.numberoffatality,e.lng,e.lat
+        FROM ods_tims_realtime_event e
+        LEFT JOIN ods_tims_dt_road r on r.id = e.road
+        LEFT JOIN ods_tims_dt_department d on d.id = e.department
+        <where>
+            <include refid="common_condition_sql"></include>
+        </where>
+        ORDER BY e.occurringtime DESC
+
+    </select>
+
+
+    <sql id="common_condition_sql">
+        e.scences = '交通事故'
+        <if test="startTime != null "> and e.occurringtime &gt;= DATE_FORMAT(#{startTime},'%Y-%m-%d %H:%i')</if>
+        <if test="endTime != null "> and e.occurringtime &lt;= DATE_FORMAT(#{endTime},'%Y-%m-%d %H:%i')</if>
+        <if test="deptName != null and deptName != ''"> and d.name like concat('%', #{deptName}, '%')</if>
+        <if test="location != null and location != ''"> and r.name like concat('%', #{location}, '%')</if>
+        <if test="keyWord != null and keyWord != ''"> and e.incidenttype like concat('%', #{keyWord}, '%')</if>
+        <if test="caseKeyWord != null and caseKeyWord != ''"> and e.vehiclesinfo like concat('%', #{caseKeyWord}, '%')</if>
+        <if test="startHour != null and startHour != ''"> and e.f_hour &gt;= #{startHour}</if>
+        <if test="endHour != null and endHour != ''"> and e.f_hour &lt;= #{endHour}</if>
+        <if test="accidentTypes != null and accidentTypes != ''">
+            and
+            <foreach collection="accidentTypes.split(',')" item="item" index="index" separator=" OR " open="(" close=")">
+                <if test="item == 'slight' ">
+                    (
+                    numberofslightinjury IS NOT NULL AND numberofslightinjury > 0
+                    and (numberofseriousinjury IS NULL OR numberofseriousinjury = 0)
+                    and (numberoffatality IS NULL OR numberoffatality = 0)
+                    )
+                </if>
+                <if test="item == 'serious' ">
+                    (
+                    numberofseriousinjury IS NOT NULL AND numberofseriousinjury > 0
+                    and (numberoffatality IS NULL OR numberoffatality = 0)
+                    )
+                </if>
+                <if test="item == 'death' ">
+                    (numberoffatality IS NOT NULL AND numberoffatality > 0)
+                </if>
+                <if test="item == 'simple' ">
+                    (
+                    (numberoffatality IS NULL OR numberofseriousinjury = 0)
+                    and (numberofslightinjury IS NULL OR numberofslightinjury = 0)
+                    and (numberofseriousinjury IS NULL OR numberofseriousinjury = 0)
+                    )
+                </if>
+            </foreach>
+        </if>
+    </sql>
+
+    <resultMap id="AccidentStatisResult" type="com.les.decisionsupport.ods.situation.vo.AccidentStatis">
+        <result property="totalNum" column="total_num"/>
+        <result property="simpleNum" column="simple_num"/>
+        <result property="slightInjuryNum" column="slight_injury_num"/>
+        <result property="seriousInjuryNum" column="serious_injury_num"/>
+        <result property="deathNum" column="death_num"/>
+    </resultMap>
+
+    <select id="selectAccidentStatis" resultMap="AccidentStatisResult">
+        SELECT
+            COUNT( e.id ) AS total_num,
+            COUNT(IF((
+                numberofslightinjury IS NOT NULL AND numberofslightinjury > 0
+                and (numberofseriousinjury IS NULL OR numberofseriousinjury = 0)
+                and (numberoffatality IS NULL OR numberoffatality = 0)
+                ), 1, NULL )
+            ) AS slight_injury_num,
+            COUNT(IF((
+                numberofseriousinjury IS NOT NULL AND numberofseriousinjury > 0
+                and (numberoffatality IS NULL OR numberoffatality = 0)
+                ), 1, NULL )
+            ) AS serious_injury_num,
+            COUNT(IF(numberoffatality IS NOT NULL AND numberoffatality > 0, 1, NULL )) AS death_num,
+            COUNT(IF(
+                (numberoffatality IS NULL OR numberoffatality = 0)
+                and (numberofslightinjury IS NULL OR numberofslightinjury = 0)
+                and (numberofseriousinjury IS NULL OR numberofseriousinjury = 0), 1, NULL )
+            ) as simple_num
+        FROM ods_tims_realtime_event e
+        LEFT JOIN ods_tims_dt_road r on r.id = e.road
+        LEFT JOIN ods_tims_dt_department d on d.id = e.department
+        <where>
+            <include refid="common_condition_sql"></include>
+        </where>
+    </select>
+
+    <resultMap id="AccidentRoadStatisResult" type="com.les.decisionsupport.ods.situation.vo.AccidentRoadStatis">
+        <result property="roadId" column="road_id"/>
+        <result property="roadName" column="road_name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="totalNum" column="total_num"/>
+    </resultMap>
+
+    <select id="selectAccidentStatisGroupByRoad" resultMap="AccidentRoadStatisResult">
+        SELECT t.road as road_id,r1.name as road_name,r1.departmentid as dept_id,d.name as dept_name,t.total_num
+        FROM (
+            SELECT e.road,COUNT(e.id) AS total_num
+            FROM ods_tims_realtime_event e
+            LEFT JOIN ods_tims_dt_road r on r.id = e.road
+            LEFT JOIN ods_tims_dt_department d on d.id = e.department
+            <where>
+                <include refid="common_condition_sql"></include>
+            </where>
+            GROUP BY e.road
+        ) t
+        LEFT JOIN ods_tims_dt_road r1 ON r1.id = t.road
+        LEFT JOIN ods_tims_dt_department d ON d.id = r1.departmentid
+        ORDER BY t.total_num desc
+        <if test="limitSize != null "> LIMIT #{limitSize}</if>
+    </select>
+
+    <resultMap id="AccidentPieStatisResult" type="com.les.decisionsupport.ods.situation.vo.AccidentPieStatis">
+        <result property="keyName" column="key_name"/>
+        <result property="totalNum" column="total_num"/>
+    </resultMap>
+    <select id="selectAccidentGroupStatis" resultMap="AccidentPieStatisResult">
+        SELECT ${groupParam} as key_name,COUNT(e.id) AS total_num
+        FROM ods_tims_realtime_event e
+        LEFT JOIN ods_tims_dt_road r on r.id = e.road
+        LEFT JOIN ods_tims_dt_department d on d.id = e.department
+        <where>
+            <include refid="common_condition_sql"></include>
+            <if test="whereAppend != null and whereAppend != ''">
+                ${whereAppend}
+            </if>
+        </where>
+        GROUP BY ${groupParam}
+        <choose>
+            <when test="orderParam != null and orderParam != ''">
+                ORDER BY ${orderParam}
+            </when>
+            <otherwise>
+                ORDER BY total_num desc
+            </otherwise>
+        </choose>
+        <if test="limitSize != null "> LIMIT #{limitSize}</if>
+    </select>
+
+
+</mapper>

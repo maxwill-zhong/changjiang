@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: decision-support
+  profiles:
+    # 环境配置
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        enabled: true
+        refresh-enabled: false
+        server-addr: 192.168.0.55:18848
+      config:
+        enabled: true
+        refresh-enabled: false
+        server-addr: 192.168.0.55:18848
+        file-extension: yaml
+        extension-configs: #配置公共配置列表
+          - dataId: default.yaml
+            group: DEFAULT_GROUP
+            refresh: true

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.les.decisionsupport.ods.emergency.event.mapper.EmergencyEventTypeMapper">
+
+    <!-- 查询所有 -->
+    <select id="selectList" resultType="com.les.decisionsupport.ods.emergency.event.model.EmergencyEventType">
+        SELECT * FROM ods_emergency_event_type
+    </select>
+
+    <!-- 根据ID查询 -->
+    <select id="selectById" resultType="com.les.decisionsupport.ods.emergency.event.model.EmergencyEventType">
+        SELECT * FROM ods_emergency_event_type WHERE id = #{id}
+    </select>
+
+    <!-- 插入 -->
+    <insert id="insert" parameterType="com.les.decisionsupport.ods.emergency.event.model.EmergencyEventType">
+        INSERT INTO ods_emergency_event_type(
+            event_type, event_name, infos, create_by, create_date, update_by,
+            update_date, del_flag, remarks, created, updated, _source, batchno
+        ) VALUES (
+                     #{eventType}, #{eventName}, #{infos}, #{createBy}, #{createDate}, #{updateBy},
+                     #{updateDate}, #{delFlag}, #{remarks}, #{created}, #{updated}, #{_source}, #{batchno}
+                 )
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="com.les.decisionsupport.ods.emergency.event.model.EmergencyEventType">
+        UPDATE ods_emergency_event_type
+        SET
+            event_type = #{eventType},
+            event_name = #{eventName},
+            infos = #{infos},
+            create_by = #{createBy},
+            create_date = #{createDate},
+            update_by = #{updateBy},
+            update_date = #{updateDate},
+            del_flag = #{delFlag},
+            remarks = #{remarks},
+            created = #{created},
+            updated = #{updated},
+            _source = #{_source},
+            batchno = #{batchno}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delete" parameterType="long">
+        DELETE FROM ods_emergency_event_type WHERE id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.les.decisionsupport.ods.emergency.event.mapper.EmergencyEventHandleMapper">
+
+<!--    &lt;!&ndash; 查询所有 &ndash;&gt;-->
+<!--    <select id="selectList" resultType="com.les.decisionsupport.ods.emergency.event.model.EmergencyEventHandle">-->
+<!--        SELECT * FROM ods_emergency_event_handle where del_flag = '0'-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 根据ID查询 &ndash;&gt;-->
+<!--    <select id="selectById" resultType="com.les.decisionsupport.ods.emergency.event.model.EmergencyEventHandle">-->
+<!--        SELECT * FROM ods_emergency_event_handle WHERE id = #{id}-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 根据条件查询 &ndash;&gt;-->
+<!--    <select id="selectByConditions" resultType="com.les.decisionsupport.ods.emergency.event.model.EmergencyEventHandle">-->
+<!--        SELECT * FROM ods_emergency_event_handle-->
+<!--        <where>-->
+<!--            <if test="id != null">-->
+<!--                AND id = #{id}-->
+<!--            </if>-->
+<!--            <if test="eventName != null and eventName != ''">-->
+<!--                AND event_name LIKE CONCAT('%', #{eventName}, '%')-->
+<!--            </if>-->
+<!--            <if test="eventType != null and eventType != ''">-->
+<!--                AND event_type LIKE CONCAT('%', #{eventType}, '%')-->
+<!--            </if>-->
+<!--            <if test="eventTime != null and eventTime != ''">-->
+<!--                AND event_time = #{eventTime}-->
+<!--            </if>-->
+<!--            <if test="reporter != null and reporter != ''">-->
+<!--                AND reporter = #{reporter}-->
+<!--            </if>-->
+<!--            <if test="reporterPhone != null and reporterPhone != ''">-->
+<!--                AND reporter_phone = #{reporterPhone}-->
+<!--            </if>-->
+<!--            <if test="eventUnit != null and eventUnit != ''">-->
+<!--                AND event_unit = #{eventUnit}-->
+<!--            </if>-->
+<!--            <if test="eventInfo != null and eventInfo != ''">-->
+<!--                AND event_info LIKE CONCAT('%', #{eventInfo}, '%')-->
+<!--            </if>-->
+<!--            <if test="eventAffix != null and eventAffix != ''">-->
+<!--                AND event_affix = #{eventAffix}-->
+<!--            </if>-->
+<!--            <if test="leaderOpinion != null and leaderOpinion != ''">-->
+<!--                AND leader_opinion LIKE CONCAT('%', #{leaderOpinion}, '%')-->
+<!--            </if>-->
+<!--            <if test="proposedOpinions != null and proposedOpinions != ''">-->
+<!--                AND proposed_opinions LIKE CONCAT('%', #{proposedOpinions}, '%')-->
+<!--            </if>-->
+<!--            <if test="processingResult != null and processingResult != ''">-->
+<!--                AND processing_result LIKE CONCAT('%', #{processingResult}, '%')-->
+<!--            </if>-->
+<!--            <if test="handler != null and handler != ''">-->
+<!--                AND handler = #{handler}-->
+<!--            </if>-->
+<!--            <if test="dutyer != null and dutyer != ''">-->
+<!--                AND dutyer = #{dutyer}-->
+<!--            </if>-->
+<!--            <if test="receiptTime != null and receiptTime != ''">-->
+<!--                AND receipt_time = #{receiptTime}-->
+<!--            </if>-->
+<!--            <if test="eventState != null and eventState != ''">-->
+<!--                AND event_state = #{eventState}-->
+<!--            </if>-->
+<!--            <if test="createBy != null and createBy != ''">-->
+<!--                AND create_by = #{createBy}-->
+<!--            </if>-->
+<!--            <if test="createDate != null and createDate != ''">-->
+<!--                AND create_date = #{createDate}-->
+<!--            </if>-->
+<!--            <if test="updateBy != null and updateBy != ''">-->
+<!--                AND update_by = #{updateBy}-->
+<!--            </if>-->
+<!--            <if test="updateDate != null and updateDate != ''">-->
+<!--                AND update_date = #{updateDate}-->
+<!--            </if>-->
+<!--            <if test="remarks != null and remarks != ''">-->
+<!--                AND remarks LIKE CONCAT('%', #{remarks}, '%')-->
+<!--            </if>-->
+<!--            <if test="eventId != null and eventId != ''">-->
+<!--                AND event_id = #{eventId}-->
+<!--            </if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 插入 &ndash;&gt;-->
+<!--    <insert id="insert" parameterType="com.les.decisionsupport.ods.emergency.event.model.EmergencyEventHandle">-->
+<!--        INSERT INTO ods_emergency_event_handle(-->
+<!--        <if test="eventName != null">event_name,</if>-->
+<!--        <if test="eventType != null">event_type,</if>-->
+<!--        <if test="eventTime != null">event_time,</if>-->
+<!--        <if test="reporter != null">reporter,</if>-->
+<!--        <if test="reporterPhone != null">reporter_phone,</if>-->
+<!--        <if test="eventUnit != null">event_unit,</if>-->
+<!--        <if test="eventInfo != null">event_info,</if>-->
+<!--        <if test="eventAffix != null">event_affix,</if>-->
+<!--        <if test="leaderOpinion != null">leader_opinion,</if>-->
+<!--        <if test="proposedOpinions != null">proposed_opinions,</if>-->
+<!--        <if test="processingResult != null">processing_result,</if>-->
+<!--        <if test="handler != null">handler,</if>-->
+<!--        <if test="dutyer != null">dutyer,</if>-->
+<!--        <if test="receiptTime != null">receipt_time,</if>-->
+<!--        <if test="eventState != null">event_state,</if>-->
+<!--        <if test="createBy != null">create_by,</if>-->
+<!--        <if test="createDate != null">create_date,</if>-->
+<!--        <if test="updateBy != null">update_by,</if>-->
+<!--        <if test="updateDate != null">update_date,</if>-->
+<!--        <if test="delFlag != null">del_flag,</if>-->
+<!--        <if test="remarks != null">remarks,</if>-->
+<!--        <if test="eventId != null">event_id,</if>-->
+<!--        <if test="resubmit != null">resubmit,</if>-->
+<!--        <if test="created != null">created</if>-->
+<!--        ) VALUES (-->
+<!--        <if test="eventName != null">#{eventName},</if>-->
+<!--        <if test="eventType != null">#{eventType},</if>-->
+<!--        <if test="eventTime != null">#{eventTime},</if>-->
+<!--        <if test="reporter != null">#{reporter},</if>-->
+<!--        <if test="reporterPhone != null">#{reporterPhone},</if>-->
+<!--        <if test="eventUnit != null">#{eventUnit},</if>-->
+<!--        <if test="eventInfo != null">#{eventInfo},</if>-->
+<!--        <if test="eventAffix != null">#{eventAffix},</if>-->
+<!--        <if test="leaderOpinion != null">#{leaderOpinion},</if>-->
+<!--        <if test="proposedOpinions != null">#{proposedOpinions},</if>-->
+<!--        <if test="processingResult != null">#{processingResult},</if>-->
+<!--        <if test="handler != null">#{handler},</if>-->
+<!--        <if test="dutyer != null">#{dutyer},</if>-->
+<!--        <if test="receiptTime != null">#{receiptTime},</if>-->
+<!--        <if test="eventState != null">#{eventState},</if>-->
+<!--        <if test="createBy != null">#{createBy},</if>-->
+<!--        <if test="createDate != null">#{createDate},</if>-->
+<!--        <if test="updateBy != null">#{updateBy},</if>-->
+<!--        <if test="updateDate != null">#{updateDate},</if>-->
+<!--        <if test="delFlag != null">#{delFlag},</if>-->
+<!--        <if test="remarks != null">#{remarks},</if>-->
+<!--        <if test="eventId != null">#{eventId},</if>-->
+<!--        <if test="resubmit != null">#{resubmit},</if>-->
+<!--        <if test="created != null">#{created}</if>-->
+<!--        )-->
+<!--    </insert>-->
+
+<!--    &lt;!&ndash; 更新 &ndash;&gt;-->
+<!--    <update id="update" parameterType="com.les.decisionsupport.ods.emergency.event.model.EmergencyEventHandle">-->
+<!--        UPDATE ods_emergency_event_handle-->
+<!--        SET-->
+<!--            event_name = #{eventName},-->
+<!--            event_type = #{eventType},-->
+<!--            event_time = #{eventTime},-->
+<!--            reporter = #{reporter},-->
+<!--            reporter_phone = #{reporterPhone},-->
+<!--            event_unit = #{eventUnit},-->
+<!--            event_info = #{eventInfo},-->
+<!--            event_affix = #{eventAffix},-->
+<!--            leader_opinion = #{leaderOpinion},-->
+<!--            proposed_opinions = #{proposedOpinions},-->
+<!--            processing_result = #{processingResult},-->
+<!--            handler = #{handler},-->
+<!--            dutyer = #{dutyer},-->
+<!--            receipt_time = #{receiptTime},-->
+<!--            event_state = #{eventState},-->
+<!--            create_by = #{createBy},-->
+<!--            create_date = #{createDate},-->
+<!--            update_by = #{updateBy},-->
+<!--            update_date = #{updateDate},-->
+<!--            del_flag = #{delFlag},-->
+<!--            remarks = #{remarks},-->
+<!--            event_id = #{eventId},-->
+<!--            resubmit = #{resubmit},-->
+<!--            created = #{created}-->
+<!--        WHERE id = #{id}-->
+<!--    </update>-->
+
+<!--    &lt;!&ndash; 删除 &ndash;&gt;-->
+<!--    <delete id="delete" parameterType="long">-->
+<!--        DELETE FROM ods_emergency_event_handle WHERE id = #{id}-->
+<!--    </delete>-->
+</mapper>
